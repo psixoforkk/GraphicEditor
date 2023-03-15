@@ -16,12 +16,12 @@
 	
 	<Window.DataTemplates>
 		<DataTemplate DataType="{x:Type localM:MyShapeModels}">
-			<Grid ColumnDefinitions="*, *">
-				<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Grid.Column="0" Text="{Binding shapeName}" />
-				<Button Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Right">
+			<WrapPanel>
+				<TextBlock VerticalAlignment="Center" HorizontalAlignment="Left" Text="{Binding shapeName}" />
+				<Button VerticalAlignment="Center" HorizontalAlignment="Right" Click="DeleteShape" >
 					<Image Source="/Assets/trashcan.png" Height="16" Width="16" />
 				</Button>
-			</Grid>
+			</WrapPanel>
 		</DataTemplate>
 	</Window.DataTemplates>
 
