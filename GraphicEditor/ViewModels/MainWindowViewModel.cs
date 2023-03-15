@@ -47,34 +47,28 @@ namespace GraphicEditor.ViewModels
             viewModelCollection.Add(new RectangleViewModel("Прямоугольник"));
             viewModelCollection.Add(new RectangleViewModel("Эллипс"));
             viewModelCollection.Add(new PathShapeViewModel("Составная фигура"));
-            GetIndex = 1;
             Content = viewModelCollection[0];
             AddButton = ReactiveCommand.Create(() =>
             {
-                if (Content == viewModelCollection[0])
-                {
-                    LineAdd();
-                }
-                if (Content == viewModelCollection[1])
-                {
-                    PolyLineAdd();
-                }
-                if (Content == viewModelCollection[2])
-                {
-                    PolygonAdd();
-                }
-                if (Content == viewModelCollection[3])
-                {
-                    RectangleAdd(true);
-                }
-                if (Content == viewModelCollection[4])
-                {
-                    RectangleAdd(false);
-                }
-                if (Content == viewModelCollection[5])
-                {
-                    PathAdd();
-                }
+                if (Content == viewModelCollection[0]) LineAdd();
+                if (Content == viewModelCollection[1]) PolyLineAdd();
+                if (Content == viewModelCollection[2]) PolygonAdd();
+                if (Content == viewModelCollection[3]) RectangleAdd(true);
+                if (Content == viewModelCollection[4]) RectangleAdd(false);
+                if (Content == viewModelCollection[5]) PathAdd();
+            });
+            ResetCommand = ReactiveCommand.Create(() =>
+            {
+                NameText = "";
+                StartPointText = "";
+                EndPointText = "";
+                PolyLineText = "";
+                RectHeight = "";
+                RectWidth = "";
+                PathShapeText = "";
+                GetFillIndex = 1;
+                GetIndex = 1;
+                NumericUpDownText = 1;
             });
         }
         private void PathAdd()
@@ -185,82 +179,56 @@ namespace GraphicEditor.ViewModels
         public string PathShapeText
         {
             get { return pathShapeText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref pathShapeText, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref pathShapeText, value); }
         }
         public string RectWidth
         {
             get { return rectWidth; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref rectWidth, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref rectWidth, value); }
         }  
         public string RectHeight
         {
             get { return rectHeight; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref rectHeight, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref rectHeight, value); }
+        }
+        public string PolyLineText
+        {
+            get { return polyLineText; }
+            set { this.RaiseAndSetIfChanged(ref polyLineText, value); }
+        }
+        public string NameText
+        {
+            get { return nameText; }
+            set { this.RaiseAndSetIfChanged(ref nameText, value); }
+        }
+        public string StartPointText
+        {
+            get { return startPointText; }
+            set { this.RaiseAndSetIfChanged(ref startPointText, value); }
+        }
+        public string EndPointText
+        {
+            get { return endPointText; }
+            set { this.RaiseAndSetIfChanged(ref endPointText, value); }
+        }
+        public int NumericUpDownText
+        {
+            get { return numericUpDownText; }
+            set { this.RaiseAndSetIfChanged(ref numericUpDownText, value); }
         }
         public int GetFillIndex
         {
-            get 
+            get
             {
                 if (fcolor_flag == true)
                 {
                     getFillIndex = 1;
                     fcolor_flag = false;
                 }
-                return getFillIndex; 
+                return getFillIndex;
             }
             set
-            {
-                this.RaiseAndSetIfChanged(ref getFillIndex, value);
-            }
-        }
-        public string PolyLineText
-        {
-            get { return polyLineText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref polyLineText, value);
-            }
-        }
-        public string NameText
-        {
-            get { return nameText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref nameText, value);
-            }
-        }
-        public string StartPointText
-        {
-            get { return startPointText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref startPointText, value);
-            }
-        }
-        public string EndPointText
-        {
-            get { return endPointText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref endPointText, value);
-            }
-        }
-        public int NumericUpDownText
-        {
-            get { return numericUpDownText; }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref numericUpDownText, value);
-            }
+            { this.RaiseAndSetIfChanged(ref getFillIndex, value); }
         }
         public int GetIndex
         {
@@ -273,10 +241,7 @@ namespace GraphicEditor.ViewModels
                 }
                 return getIndex;
             }
-            set
-            {
-                this.RaiseAndSetIfChanged(ref getIndex, value);
-            }
+            set { this.RaiseAndSetIfChanged(ref getIndex, value); }
         }
         public object Content
         {
@@ -292,6 +257,7 @@ namespace GraphicEditor.ViewModels
                 PolyLineText = "";
                 RectHeight = "";
                 RectWidth = "";
+                PathShapeText = "";
                 color_flag = true;
                 fcolor_flag = true;
                 NumericUpDownText = 1;
