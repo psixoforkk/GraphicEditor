@@ -17,6 +17,7 @@ namespace GraphicEditor.ViewModels
 {
     public class MainWindowViewModel : ViewModelBase
     {
+        public string path;
         public ObservableCollection<Shape> ShapesIn { get; set; } = new ObservableCollection<Shape>();
         public ObservableCollection<MyShapeModels> ShapesOut { get; set; } = new ObservableCollection<MyShapeModels>();
         private object content;
@@ -27,7 +28,7 @@ namespace GraphicEditor.ViewModels
         public ReactiveCommand<Unit, Unit> AddButton { get; }
         public ReactiveCommand<Unit, Unit> ResetCommand { get; }
         public ReactiveCommand<Unit, Unit> DeleteShape { get; }
-
+        private bool selection_flag;
         private bool color_flag;
         private bool fcolor_flag;
         public string nameText;
@@ -54,12 +55,12 @@ namespace GraphicEditor.ViewModels
             Content = viewModelCollection[0];
             AddButton = ReactiveCommand.Create(() =>
             {
-                if (Content == viewModelCollection[0] && SelectedLBItem == null) LineAdd();
-                if (Content == viewModelCollection[1] && SelectedLBItem == null) PolyLineAdd();
-                if (Content == viewModelCollection[2] && SelectedLBItem == null) PolygonAdd();
-                if (Content == viewModelCollection[3] && SelectedLBItem == null) RectangleAdd(true);
-                if (Content == viewModelCollection[4] && SelectedLBItem == null) RectangleAdd(false);
-                if (Content == viewModelCollection[5] && SelectedLBItem == null) PathAdd();
+                if (Content == viewModelCollection[0]) LineAdd();
+                if (Content == viewModelCollection[1]) PolyLineAdd();
+                if (Content == viewModelCollection[2]) PolygonAdd();
+                if (Content == viewModelCollection[3]) RectangleAdd(true);
+                if (Content == viewModelCollection[4]) RectangleAdd(false);
+                if (Content == viewModelCollection[5]) PathAdd();
             });
             ResetCommand = ReactiveCommand.Create(() =>
             {
@@ -180,6 +181,11 @@ namespace GraphicEditor.ViewModels
                 }
             }
         }
+        public string Path
+        {
+            get { return path; }
+            set { this.RaiseAndSetIfChanged(ref path, value); }
+        }
         public int GetSelectedItemIndex
         {
             get { return getSelectedItemIndex; }
@@ -193,7 +199,10 @@ namespace GraphicEditor.ViewModels
         public MyShapeModels SelectedLBItem
         {
             get { return selectedLBItem; }
-            set { this.RaiseAndSetIfChanged(ref selectedLBItem, value); }
+            set 
+            { 
+                this.RaiseAndSetIfChanged(ref selectedLBItem, value);
+            }
         }
         public string PathShapeText
         {

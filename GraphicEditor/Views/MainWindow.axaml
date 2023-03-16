@@ -29,7 +29,7 @@
 		<WrapPanel Grid.Column="0" Grid.ColumnSpan="3" Grid.Row="0">
 			<Menu>
 				<MenuItem Header="Экспортировать">
-					<MenuItem Header="Экспортировать в png"/>
+					<MenuItem Header="Экспортировать в png" Click="SavePngFileDialogButtonClick" />
 					<MenuItem Header="Экспортировать в xml"/>
 					<MenuItem Header="Экспортировать в json"/>
 				</MenuItem>
@@ -57,15 +57,15 @@
 			<Button HorizontalContentAlignment="Center" Width="170" Content="Сброс" Command="{Binding ResetCommand}" />
 		</WrapPanel>
 		<Border BorderBrush="Black" BorderThickness="2" Grid.Column="1" Grid.Row="1" Grid.RowSpan="2">
-			<ItemsControl Items="{Binding ShapesIn}">
+			<ItemsControl x:Name="convers" Items="{Binding ShapesIn}">
 				<ItemsControl.ItemsPanel>
 					<ItemsPanelTemplate>
-						<Canvas />
+						<Canvas Name="canvas" />
 					</ItemsPanelTemplate>
 				</ItemsControl.ItemsPanel>
 			</ItemsControl>
 		</Border>
-		<ListBox Items="{Binding ShapesOut}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="2">
+		<ListBox Selection="{Binding SelectedLBItem}" Items="{Binding ShapesOut}" Grid.Column="2" Grid.Row="1" Grid.RowSpan="2" BorderBrush="Black" BorderThickness="2">
 		</ListBox>
 	</Grid>
 
