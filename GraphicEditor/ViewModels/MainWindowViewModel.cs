@@ -12,6 +12,7 @@ using System.Linq;
 using System.Reactive;
 using System.Reflection;
 using System.Text;
+using System.Xml.Linq;
 
 namespace GraphicEditor.ViewModels
 {
@@ -55,12 +56,28 @@ namespace GraphicEditor.ViewModels
             Content = viewModelCollection[0];
             AddButton = ReactiveCommand.Create(() =>
             {
-                if (Content == viewModelCollection[0]) LineAdd();
-                if (Content == viewModelCollection[1]) PolyLineAdd();
-                if (Content == viewModelCollection[2]) PolygonAdd();
-                if (Content == viewModelCollection[3]) RectangleAdd(true);
-                if (Content == viewModelCollection[4]) RectangleAdd(false);
-                if (Content == viewModelCollection[5]) PathAdd();
+                if (CheckName(NameText) == -1)
+                {
+                    if (Content == viewModelCollection[0]) LineAdd();
+                    if (Content == viewModelCollection[1]) PolyLineAdd();
+                    if (Content == viewModelCollection[2]) PolygonAdd();
+                    if (Content == viewModelCollection[3]) RectangleAdd(true);
+                    if (Content == viewModelCollection[4]) RectangleAdd(false);
+                    if (Content == viewModelCollection[5]) PathAdd();
+                }
+                else
+                {
+                    int g = CheckName(NameText);
+                    ShapesOut.RemoveAt(getSelectedItemIndex);
+                    ShapesIn.RemoveAt(getSelectedItemIndex);
+                    if (Content == viewModelCollection[0]) LineAdd();
+                    if (Content == viewModelCollection[1]) PolyLineAdd();
+                    if (Content == viewModelCollection[2]) PolygonAdd();
+                    if (Content == viewModelCollection[3]) RectangleAdd(true);
+                    if (Content == viewModelCollection[4]) RectangleAdd(false);
+                    if (Content == viewModelCollection[5]) PathAdd();
+
+                }
             });
             ResetCommand = ReactiveCommand.Create(() =>
             {
@@ -75,6 +92,21 @@ namespace GraphicEditor.ViewModels
                 GetIndex = 1;
                 NumericUpDownText = 1;
             });
+        }
+        private int CheckName(string name)
+        {
+            for (int i = 0; i < ShapesOut.Count; i++)
+            {
+                if (ShapesOut[i].shapeName == name)
+                {
+                    return i;
+                }
+                else
+                {
+                    return -1;
+                }
+            }
+            return -1;
         }
         private void PathAdd()
         {
@@ -192,8 +224,11 @@ namespace GraphicEditor.ViewModels
             set 
             {
                 this.RaiseAndSetIfChanged(ref getSelectedItemIndex, value);
-                ShapesOut.RemoveAt(getSelectedItemIndex);
-                ShapesIn.RemoveAt(getSelectedItemIndex);
+                if (selectedLBItem != null)
+                {
+                    ShapesOut.RemoveAt(getSelectedItemIndex);
+                    ShapesIn.RemoveAt(getSelectedItemIndex);
+                }
             }
         }
         public MyShapeModels SelectedLBItem

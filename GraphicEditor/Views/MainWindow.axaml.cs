@@ -23,12 +23,8 @@ namespace GraphicEditor.Views
         {
             if (DataContext is MainWindowViewModel mainWindowViewModel)
             {
-                var bb = sender as Button;
-                var ss = bb.Parent;
-                var dd = ss.Parent;
-                var gg = dd.Parent as ListBox;
-                int ggitem = gg.SelectedIndex;
-                mainWindowViewModel.GetSelectedItemIndex = ggitem;
+                var but = this.GetVisualDescendants().OfType<ListBox>().Where(but => but.Name.Equals("selectlb")).FirstOrDefault();
+                mainWindowViewModel.GetSelectedItemIndex = but.SelectedIndex;
             }
         }
         public async void SavePngFileDialogButtonClick(object sender, RoutedEventArgs args)
