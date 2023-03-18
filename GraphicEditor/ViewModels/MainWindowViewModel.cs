@@ -8,6 +8,7 @@ using SkiaSharp;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Reactive;
 using System.Reflection;
@@ -110,7 +111,7 @@ namespace GraphicEditor.ViewModels
         }
         private void PathAdd()
         {
-            Path newShape = new Path
+            Avalonia.Controls.Shapes.Path newShape = new Avalonia.Controls.Shapes.Path
             {
                 Data = Geometry.Parse(pathShapeText),
                 Fill = ListOfBrushes[GetFillIndex].Brush,

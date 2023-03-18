@@ -31,13 +31,13 @@
 				<MenuItem Header="Экспортировать">
 					<MenuItem Header="Экспортировать в png" Click="SavePngFileDialogButtonClick" />
 					<MenuItem Header="Экспортировать в xml"/>
-					<MenuItem Header="Экспортировать в json"/>
+					<MenuItem Header="Экспортировать в json" Click="SaveJsonFileDialogButtonClick"/>
 				</MenuItem>
 			</Menu>
 			<Menu>
 				<MenuItem Header="Импортировать">
 					<MenuItem Header="Импортировать из xml"/>
-					<MenuItem Header="Импортировать из json"/>
+					<MenuItem Header="Импортировать из json" Click="OpenJsonFileDialogButtonClick"/>
 				</MenuItem>
 			</Menu>
 		</WrapPanel>
