@@ -55,9 +55,11 @@ namespace GraphicEditor.Views
                         string jsonText = Encoding.Default.GetString(buffer);
                         mainWindowViewModel.ShapesIn.Clear();
                         mainWindowViewModel.ShapesOut.Clear();
-                        mainWindowViewModel.ShapesOut = JsonSerializer.Deserialize<ObservableCollection<MyShapeModels>>(jsonText)!;
-                        foreach (MyShapeModels gger in mainWindowViewModel.ShapesOut)
+                        List<MyShapeModels> newList;
+                        newList = JsonSerializer.Deserialize<List<MyShapeModels>>(jsonText)!;
+                        foreach (MyShapeModels gger in newList)
                         {
+                            mainWindowViewModel.ShapesOut.Add(gger);
                             if (gger.type == "line")
                             {
                                 Line newShape = new Line
@@ -85,7 +87,7 @@ namespace GraphicEditor.Views
                             }
                             if (gger.type == "ellipse")
                             {
-                                Rectangle newShape = new Rectangle
+                                Ellipse newShape = new Ellipse
                                 {
                                     Margin = Avalonia.Thickness.Parse(gger.stp),
                                     Width = int.Parse(gger.rctheight),
@@ -190,7 +192,7 @@ namespace GraphicEditor.Views
                             }
                             if (gger.type == "ellipse")
                             {
-                                Rectangle newShape = new Rectangle
+                                Ellipse newShape = new Ellipse
                                 {
                                     Margin = Avalonia.Thickness.Parse(gger.stp),
                                     Width = int.Parse(gger.rctheight),
