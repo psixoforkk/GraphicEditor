@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reactive;
 using System.Reflection;
 using System.Text;
@@ -111,50 +112,71 @@ namespace GraphicEditor.ViewModels
         }
         private void PathAdd()
         {
+            MyShapeModels newestShape = new MyShapeModels(NameText);
+            newestShape.strk = NumericUpDownText;
+            newestShape.pthdata = PathShapeText;
+            newestShape.brsh = GetIndex;
+            newestShape.brsh1 = GetFillIndex;
+            newestShape.type = "pthshape";
             Avalonia.Controls.Shapes.Path newShape = new Avalonia.Controls.Shapes.Path
             {
-                Data = Geometry.Parse(pathShapeText),
-                Fill = ListOfBrushes[GetFillIndex].Brush,
-                Stroke = ListOfBrushes[GetIndex].Brush,
-                StrokeThickness = NumericUpDownText
+                Data = Geometry.Parse(newestShape.pthdata),
+                Fill = ListOfBrushes[newestShape.brsh1].Brush,
+                Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                StrokeThickness = newestShape.strk
             };
             ShapesIn.Add(newShape);
-            ShapesOut.Add(new MyShapeModels(NameText));
+            ShapesOut.Add(newestShape);
         }
         private void RectangleAdd(bool flag)
         {
+            MyShapeModels newestShape = new MyShapeModels(NameText);
+            newestShape.stp = StartPointText;
+            newestShape.rctheight = RectHeight;
+            newestShape.rctwidth = RectWidth;
+            newestShape.strk = NumericUpDownText;
+            newestShape.brsh = GetIndex;
+            newestShape.brsh1 = GetFillIndex;
             if (flag)
             {
+                newestShape.type = "rectangle";
                 Rectangle newShape = new Rectangle
                 {
-                    Margin = Avalonia.Thickness.Parse(startPointText),
-                    Width = int.Parse(rectWidth),
-                    Height = int.Parse(rectHeight),
-                    Fill = ListOfBrushes[GetFillIndex].Brush,
-                    Stroke = ListOfBrushes[GetIndex].Brush,
-                    StrokeThickness = NumericUpDownText
+                    Margin = Avalonia.Thickness.Parse(newestShape.stp),
+                    Width = int.Parse(newestShape.rctheight),
+                    Height = int.Parse(newestShape.rctwidth),
+                    Fill = ListOfBrushes[newestShape.brsh1].Brush,
+                    Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                    StrokeThickness = newestShape.strk
                 };
                 ShapesIn.Add(newShape);
             }
             else
             {
+                newestShape.type = "ellipse";
                 Ellipse newShape = new Ellipse
                 {
-                    Margin = Avalonia.Thickness.Parse(startPointText),
-                    Width = int.Parse(rectWidth),
-                    Height = int.Parse(rectHeight),
-                    Fill = ListOfBrushes[GetFillIndex].Brush,
-                    Stroke = ListOfBrushes[GetIndex].Brush,
-                    StrokeThickness = NumericUpDownText
+                    Margin = Avalonia.Thickness.Parse(newestShape.stp),
+                    Width = int.Parse(newestShape.rctheight),
+                    Height = int.Parse(newestShape.rctwidth),
+                    Fill = ListOfBrushes[newestShape.brsh1].Brush,
+                    Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                    StrokeThickness = newestShape.strk
                 };
                 ShapesIn.Add(newShape);
             }
-            ShapesOut.Add(new MyShapeModels(NameText));
+            ShapesOut.Add(newestShape);
         }
         private void PolygonAdd()
         {
             List<Avalonia.Point> listOfPolyLinePoints = new List<Avalonia.Point>();
-            string[] words = polyLineText.Split(' ');
+            MyShapeModels newestShape = new MyShapeModels(NameText);
+            newestShape.plylinetext = polyLineText;
+            newestShape.strk = NumericUpDownText;
+            newestShape.brsh = GetIndex;
+            newestShape.brsh1 = GetFillIndex;
+            newestShape.type = "polygon";
+            string[] words = newestShape.plylinetext.Split(' ');
             foreach (string word in words)
             {
                 listOfPolyLinePoints.Add(Avalonia.Point.Parse(word));
@@ -162,17 +184,22 @@ namespace GraphicEditor.ViewModels
             Polygon newShape = new Polygon
             {
                 Points = listOfPolyLinePoints,
-                Fill = ListOfBrushes[GetFillIndex].Brush,
-                Stroke = ListOfBrushes[GetIndex].Brush,
-                StrokeThickness = NumericUpDownText
+                Fill = ListOfBrushes[newestShape.brsh1].Brush,
+                Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                StrokeThickness = newestShape.strk
             };
             ShapesIn.Add(newShape);
-            ShapesOut.Add(new MyShapeModels(NameText));
+            ShapesOut.Add(newestShape);
         }
         private void PolyLineAdd()
         {
             List<Avalonia.Point> listOfPolyLinePoints = new List<Avalonia.Point>();
-            string[] words = polyLineText.Split(' ');
+            MyShapeModels newestShape = new MyShapeModels(NameText);
+            newestShape.plylinetext = polyLineText;
+            newestShape.strk = NumericUpDownText;
+            newestShape.brsh = GetIndex;
+            newestShape.type = "polyline";
+            string[] words = newestShape.plylinetext.Split(' ');
             foreach (string word in words)
             {
                 listOfPolyLinePoints.Add(Avalonia.Point.Parse(word));
@@ -180,24 +207,30 @@ namespace GraphicEditor.ViewModels
             Polyline newShape = new Polyline
             {
                 Points = listOfPolyLinePoints,
-                Stroke = ListOfBrushes[GetIndex].Brush,
-                StrokeThickness = NumericUpDownText
+                Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                StrokeThickness = newestShape.strk
             };
             ShapesIn.Add(newShape);
-            ShapesOut.Add(new MyShapeModels(NameText));
+            ShapesOut.Add(newestShape);
         }
-        private void LineAdd()
+        public void LineAdd()
         {
+            MyShapeModels newestShape = new MyShapeModels(NameText);
+            newestShape.stp = StartPointText;
+            newestShape.enp = EndPointText;
+            newestShape.brsh = GetIndex;
+            newestShape.strk = NumericUpDownText;
+            newestShape.type = "line";
             Line newShape = new Line
             {
-                StartPoint = Avalonia.Point.Parse(startPointText),
-                EndPoint = Avalonia.Point.Parse(endPointText),
-                Stroke = ListOfBrushes[GetIndex].Brush,
-                StrokeThickness = NumericUpDownText,
+                StartPoint = Avalonia.Point.Parse(newestShape.stp),
+                EndPoint = Avalonia.Point.Parse(newestShape.enp),
+                Stroke = ListOfBrushes[newestShape.brsh].Brush,
+                StrokeThickness = newestShape.strk,
 
             };
             ShapesIn.Add(newShape);
-            ShapesOut.Add(new MyShapeModels(NameText));
+            ShapesOut.Add(newestShape);
         }
         public void LoadColors()
         {

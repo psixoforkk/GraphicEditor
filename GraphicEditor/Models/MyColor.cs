@@ -11,5 +11,6 @@ namespace GraphicEditor.Models
     {
         public string? Name { get; set; }
         public Brush? Brush { get; set; }
+        public int ind { get; set; }
     }
 }
