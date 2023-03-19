@@ -21,6 +21,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml;
 using System.Xml.Serialization;
 
 namespace GraphicEditor.Views
@@ -38,13 +39,6 @@ namespace GraphicEditor.Views
                 var but = this.GetVisualDescendants().OfType<ListBox>().Where(but => but.Name.Equals("selectlb")).FirstOrDefault();
                 mainWindowViewModel.GetSelectedItemIndex = but.SelectedIndex;
             }
-        }
-        public System.Text.Json.Serialization.JsonNumberHandling NumberHandling { get; }
-        public enum JsonNumberHandling : byte
-        {
-            AllowReadingFromString = 0x1,
-            WriteAsString = 0x2,
-            AllowNamedFloatingPointLiterals = 0x4
         }
         public async void OpenJsonFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
@@ -153,14 +147,106 @@ namespace GraphicEditor.Views
         }
         public async void OpenXmlFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
-            //s
             OpenFileDialog openFileDialog = new OpenFileDialog();
             string[]? result = await openFileDialog.ShowAsync(this);
             if (DataContext is MainWindowViewModel mainWindowViewModel)
             {
                 if (result != null)
                 {
+                    mainWindowViewModel.ShapesOut.Clear();
+                    mainWindowViewModel.ShapesIn.Clear();
+                    List<MyShapeModels> newList;
+                    XmlSerializer xs = new XmlSerializer(typeof(List<MyShapeModels>));
+                    using (XmlReader reader = XmlReader.Create(result[0]))
+                    {
+                        newList = (List<MyShapeModels>)xs.Deserialize(reader)!;
+                        foreach (MyShapeModels gger in newList)
+                        {
+                            mainWindowViewModel.ShapesOut.Add(gger);
+                            if (gger.type == "line")
+                            {
+                                Line newShape = new Line
+                                {
+                                    StartPoint = Avalonia.Point.Parse(gger.stp),
+                                    EndPoint = Avalonia.Point.Parse(gger.enp),
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    StrokeThickness = gger.strk,
 
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                            if (gger.type == "rectangle")
+                            {
+                                Rectangle newShape = new Rectangle
+                                {
+                                    Margin = Avalonia.Thickness.Parse(gger.stp),
+                                    Width = int.Parse(gger.rctheight),
+                                    Height = int.Parse(gger.rctwidth),
+                                    Fill = mainWindowViewModel.ListOfBrushes[gger.brsh1].Brush,
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    StrokeThickness = gger.strk
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                            if (gger.type == "ellipse")
+                            {
+                                Rectangle newShape = new Rectangle
+                                {
+                                    Margin = Avalonia.Thickness.Parse(gger.stp),
+                                    Width = int.Parse(gger.rctheight),
+                                    Height = int.Parse(gger.rctwidth),
+                                    Fill = mainWindowViewModel.ListOfBrushes[gger.brsh1].Brush,
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    StrokeThickness = gger.strk
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                            if (gger.type == "pthshape")
+                            {
+                                Avalonia.Controls.Shapes.Path newShape = new Avalonia.Controls.Shapes.Path
+                                {
+                                    Data = Geometry.Parse(gger.pthdata),
+                                    Fill = mainWindowViewModel.ListOfBrushes[gger.brsh1].Brush,
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    StrokeThickness = gger.strk
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                            if (gger.type == "polyline")
+                            {
+                                List<Avalonia.Point> listOfPolyLinePoints = new List<Avalonia.Point>();
+                                string[] words = gger.plylinetext.Split(' ');
+                                foreach (string word in words)
+                                {
+                                    listOfPolyLinePoints.Add(Avalonia.Point.Parse(word));
+                                }
+                                Polyline newShape = new Polyline
+                                {
+                                    Points = listOfPolyLinePoints,
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    StrokeThickness = gger.strk
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                            if (gger.type == "polygon")
+                            {
+                                List<Avalonia.Point> listOfPolyLinePoints = new List<Avalonia.Point>();
+                                string[] words = gger.plylinetext.Split(' ');
+                                foreach (string word in words)
+                                {
+                                    listOfPolyLinePoints.Add(Avalonia.Point.Parse(word));
+                                }
+                                Polyline newShape = new Polyline
+                                {
+                                    Points = listOfPolyLinePoints,
+                                    Stroke = mainWindowViewModel.ListOfBrushes[gger.brsh].Brush,
+                                    Fill = mainWindowViewModel.ListOfBrushes[gger.brsh1].Brush,
+                                    StrokeThickness = gger.strk
+                                };
+                                mainWindowViewModel.ShapesIn.Add(newShape);
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -173,16 +259,10 @@ namespace GraphicEditor.Views
             {
                 if (result != null)
                 {
-                    using (FileStream fs = new FileStream(result, FileMode.OpenOrCreate))
+                    XmlSerializer xs = new XmlSerializer(typeof(ObservableCollection<MyShapeModels>));
+                    using (XmlWriter writer = XmlWriter.Create(result))
                     {
-                        XmlSerializer xs = new XmlSerializer(mainWindowViewModel.ShapesOut.GetType());
-                        XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
-                        StringWriter xmlstr = new StringWriter(new StringBuilder());
-
-                        xs.Serialize(xmlstr, mainWindowViewModel.ShapesOut);
-                        string newstr = xmlstr.ToString();
-                        byte[] buffer = Encoding.Default.GetBytes(newstr);
-                        fs.Write(buffer, 0, buffer.Length);
+                        xs.Serialize(writer, mainWindowViewModel.ShapesOut);
                     }
                 }
             }
