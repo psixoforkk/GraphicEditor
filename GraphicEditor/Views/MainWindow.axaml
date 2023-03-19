@@ -30,7 +30,7 @@
 			<Menu>
 				<MenuItem Header="Экспортировать">
 					<MenuItem Header="Экспортировать в png" Click="SavePngFileDialogButtonClick" />
-					<MenuItem Header="Экспортировать в xml"/>
+					<MenuItem Header="Экспортировать в xml" Click="SaveXmlFileDialogButtonClick"/>
 					<MenuItem Header="Экспортировать в json" Click="SaveJsonFileDialogButtonClick"/>
 				</MenuItem>
 			</Menu>

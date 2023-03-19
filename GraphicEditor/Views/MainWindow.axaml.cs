@@ -58,13 +58,12 @@ namespace GraphicEditor.Views
                         byte[] buffer = new byte[fs.Length];
                         fs.Read(buffer, 0, buffer.Length);
                         string jsonText = Encoding.Default.GetString(buffer);
-                        string[] wordsM = jsonText.Split('`');
+                        //string[] wordsM = jsonText.Split('`');
                         mainWindowViewModel.ShapesIn.Clear();
                         mainWindowViewModel.ShapesOut.Clear();
-                        for (int i = 0; i < wordsM.Length - 1; i++)
+                        mainWindowViewModel.ShapesOut = JsonSerializer.Deserialize<ObservableCollection<MyShapeModels>>(jsonText)!;
+                        foreach (MyShapeModels gger in mainWindowViewModel.ShapesOut)
                         {
-                            MyShapeModels gger = JsonSerializer.Deserialize<MyShapeModels>(wordsM[i])!;
-                            mainWindowViewModel.ShapesOut.Add(gger);
                             if (gger.type == "line")
                             {
                                 Line newShape = new Line
@@ -152,6 +151,12 @@ namespace GraphicEditor.Views
                 }
             }
         }
+        public async void SaveXmlFileDialogButtonClick(object sender, RoutedEventArgs args)
+        {
+            SaveFileDialog saveFileDialog = new SaveFileDialog();
+            saveFileDialog.DefaultExtension = ".XML";
+            string? result = await saveFileDialog.ShowAsync(this);
+        }
         public async void SaveJsonFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
@@ -163,13 +168,13 @@ namespace GraphicEditor.Views
                 {
                     using (FileStream fs = new FileStream(result, FileMode.OpenOrCreate))
                     {
-                        string jsons = string.Empty;
-                        foreach (MyShapeModels gg in mainWindowViewModel.ShapesOut)
+                        string jsons = JsonSerializer.Serialize(mainWindowViewModel.ShapesOut);
+                        /*foreach (MyShapeModels gg in mainWindowViewModel.ShapesOut)
                         {
                             string json = JsonSerializer.Serialize(gg);
                             jsons += json;
                             jsons += "`";
-                        }
+                        }*/
                         byte[] buffer = Encoding.Default.GetBytes(jsons);
                         fs.Write(buffer, 0, buffer.Length);
                     }

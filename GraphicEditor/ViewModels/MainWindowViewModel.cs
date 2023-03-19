@@ -213,7 +213,7 @@ namespace GraphicEditor.ViewModels
             ShapesIn.Add(newShape);
             ShapesOut.Add(newestShape);
         }
-        public void LineAdd()
+        private void LineAdd()
         {
             MyShapeModels newestShape = new MyShapeModels(NameText);
             newestShape.stp = StartPointText;
