@@ -36,7 +36,7 @@ namespace GraphicEditor.Views
         {
             if (DataContext is MainWindowViewModel mainWindowViewModel)
             {
-                var but = this.GetVisualDescendants().OfType<ListBox>().Where(but => but.Name.Equals("selectlb")).FirstOrDefault();
+                var but = this.GetVisualDescendants().OfType<ListBox>().Where(but => but.Name.Equals("listBoxShapes")).FirstOrDefault();
                 mainWindowViewModel.GetSelectedItemIndex = but.SelectedIndex;
             }
         }
