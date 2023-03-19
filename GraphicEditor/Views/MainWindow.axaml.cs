@@ -153,6 +153,7 @@ namespace GraphicEditor.Views
         }
         public async void OpenXmlFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
+            //s
             OpenFileDialog openFileDialog = new OpenFileDialog();
             string[]? result = await openFileDialog.ShowAsync(this);
             if (DataContext is MainWindowViewModel mainWindowViewModel)
