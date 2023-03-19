@@ -28,7 +28,7 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<NumericUpDown Text="{Binding $parent[Window].DataContext.NumericUpDownText}" Value="1" Minimum="1" Width="200" Margin="28 5" Grid.Column="1" Grid.Row="5" />
+		<NumericUpDown Text="{Binding $parent[Window].DataContext.NumericUpDownText}" Value="{Binding $parent[Window].DataContext.NumericUpDownText}" Minimum="1" Width="200" Margin="28 5" Grid.Column="1" Grid.Row="5" />
 		<ComboBox SelectedIndex="{Binding $parent[Window].DataContext.GetFillIndex}" Items="{Binding $parent[Window].DataContext.ListOfBrushes}" Width="200" Margin="10 5" Grid.Column="1" Grid.Row="6">
 			<ComboBox.ItemTemplate>
 				<DataTemplate>

@@ -269,8 +269,79 @@ namespace GraphicEditor.ViewModels
         {
             get { return selectedLBItem; }
             set 
-            { 
+            {
                 this.RaiseAndSetIfChanged(ref selectedLBItem, value);
+                if (SelectedLBItem != null)
+                {
+                    if (SelectedLBItem.type == "line")
+                    {
+                        Content = viewModelCollection[0];
+                        NameText = SelectedLBItem.shapeName;
+                        StartPointText = SelectedLBItem.stp;
+                        EndPointText = SelectedLBItem.enp;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        color_flag = false;
+                        GetIndex = SelectedLBItem.brsh;
+                    }
+                    if (SelectedLBItem.type == "polyline")
+                    {
+                        Content = viewModelCollection[1];
+                        NameText = SelectedLBItem.shapeName;
+                        PolyLineText = SelectedLBItem.plylinetext;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        GetIndex = SelectedLBItem.brsh;
+
+                    }
+                    if (SelectedLBItem.type == "polygon")
+                    { 
+                        Content = viewModelCollection[2];
+                        NameText = SelectedLBItem.shapeName;
+                        PolyLineText = SelectedLBItem.plylinetext;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        color_flag = false;
+                        fcolor_flag = false;
+                        GetIndex = SelectedLBItem.brsh;
+                        GetFillIndex = SelectedLBItem.brsh1;
+                    }
+                    if (SelectedLBItem.type == "rectangle")
+                    { 
+                        Content = viewModelCollection[3];
+                        NameText = SelectedLBItem.shapeName;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        StartPointText = SelectedLBItem.stp;
+                        color_flag = false;
+                        fcolor_flag = false;
+                        GetIndex = SelectedLBItem.brsh;
+                        GetFillIndex = SelectedLBItem.brsh1;
+                        RectWidth = SelectedLBItem.rctwidth;
+                        RectHeight = SelectedLBItem.rctheight;
+                    }
+
+                    if (SelectedLBItem.type == "ellipse")
+                    {
+                        Content = viewModelCollection[4];
+                        NameText = SelectedLBItem.shapeName;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        StartPointText = SelectedLBItem.stp;
+                        color_flag = false;
+                        fcolor_flag = false;
+                        GetIndex = SelectedLBItem.brsh;
+                        GetFillIndex = SelectedLBItem.brsh1;
+                        RectWidth = SelectedLBItem.rctwidth;
+                        RectHeight = SelectedLBItem.rctheight;
+                    }
+                    if (SelectedLBItem.type == "pthshape")
+                    {
+                        Content = viewModelCollection[5];
+                        NameText = SelectedLBItem.shapeName;
+                        NumericUpDownText = SelectedLBItem.strk;
+                        color_flag = false;
+                        fcolor_flag = false;
+                        GetIndex = SelectedLBItem.brsh;
+                        GetFillIndex = SelectedLBItem.brsh1;
+                        PathShapeText = SelectedLBItem.pthdata;
+                    }
+                }
             }
         }
         public string PathShapeText

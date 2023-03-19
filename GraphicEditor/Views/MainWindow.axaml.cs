@@ -21,6 +21,7 @@ using System.Text;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml.Serialization;
 
 namespace GraphicEditor.Views
 {
@@ -58,7 +59,6 @@ namespace GraphicEditor.Views
                         byte[] buffer = new byte[fs.Length];
                         fs.Read(buffer, 0, buffer.Length);
                         string jsonText = Encoding.Default.GetString(buffer);
-                        //string[] wordsM = jsonText.Split('`');
                         mainWindowViewModel.ShapesIn.Clear();
                         mainWindowViewModel.ShapesOut.Clear();
                         mainWindowViewModel.ShapesOut = JsonSerializer.Deserialize<ObservableCollection<MyShapeModels>>(jsonText)!;
@@ -151,11 +151,40 @@ namespace GraphicEditor.Views
                 }
             }
         }
+        public async void OpenXmlFileDialogButtonClick(object sender, RoutedEventArgs args)
+        {
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+            string[]? result = await openFileDialog.ShowAsync(this);
+            if (DataContext is MainWindowViewModel mainWindowViewModel)
+            {
+                if (result != null)
+                {
+
+                }
+            }
+        }
         public async void SaveXmlFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog();
             saveFileDialog.DefaultExtension = ".XML";
             string? result = await saveFileDialog.ShowAsync(this);
+            if (DataContext is MainWindowViewModel mainWindowViewModel)
+            {
+                if (result != null)
+                {
+                    using (FileStream fs = new FileStream(result, FileMode.OpenOrCreate))
+                    {
+                        XmlSerializer xs = new XmlSerializer(mainWindowViewModel.ShapesOut.GetType());
+                        XmlSerializerNamespaces ns = new XmlSerializerNamespaces();
+                        StringWriter xmlstr = new StringWriter(new StringBuilder());
+
+                        xs.Serialize(xmlstr, mainWindowViewModel.ShapesOut);
+                        string newstr = xmlstr.ToString();
+                        byte[] buffer = Encoding.Default.GetBytes(newstr);
+                        fs.Write(buffer, 0, buffer.Length);
+                    }
+                }
+            }
         }
         public async void SaveJsonFileDialogButtonClick(object sender, RoutedEventArgs args)
         {
@@ -169,12 +198,6 @@ namespace GraphicEditor.Views
                     using (FileStream fs = new FileStream(result, FileMode.OpenOrCreate))
                     {
                         string jsons = JsonSerializer.Serialize(mainWindowViewModel.ShapesOut);
-                        /*foreach (MyShapeModels gg in mainWindowViewModel.ShapesOut)
-                        {
-                            string json = JsonSerializer.Serialize(gg);
-                            jsons += json;
-                            jsons += "`";
-                        }*/
                         byte[] buffer = Encoding.Default.GetBytes(jsons);
                         fs.Write(buffer, 0, buffer.Length);
                     }

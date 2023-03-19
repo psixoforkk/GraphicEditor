@@ -23,6 +23,6 @@
 				</DataTemplate>
 			</ComboBox.ItemTemplate>
 		</ComboBox>
-		<NumericUpDown Text="{Binding $parent[Window].DataContext.NumericUpDownText}" Value="1" Minimum="1" Width="200" Margin="28 5" Grid.Column="1" Grid.Row="3" />
+		<NumericUpDown Text="{Binding $parent[Window].DataContext.NumericUpDownText}" Value="{Binding $parent[Window].DataContext.NumericUpDownText}" Minimum="1" Width="200" Margin="28 5" Grid.Column="1" Grid.Row="3" />
 	</Grid>
 </UserControl>
